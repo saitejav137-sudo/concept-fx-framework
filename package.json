@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "Professional-grade motion graphics framework",
   "scripts": {
-    "build": "remotion render src/index.tsx Main out/video.mp4"
+    "build": "remotion render src/index.tsx Main out/video.mp4 --pixel-format yuv420p --crf 18"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.434",
