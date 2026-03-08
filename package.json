@@ -1,0 +1,14 @@
+{
+  "name": "pro-fx-framework",
+  "version": "2.0.0",
+  "description": "Professional-grade motion graphics framework",
+  "scripts": {
+    "build": "remotion render src/index.tsx Main out/video.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.434",
+    "remotion": "^4.0.434",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
