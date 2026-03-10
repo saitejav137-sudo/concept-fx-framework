@@ -8,17 +8,13 @@ export type Bezier = (t: number) => number;
 export const linear: Easing = (t) => t;
 
 // Cubic Bezier (standard)
-export const cubicBezier = (x1: number, y1: number, x2: number, y2: number): Easing => {
+export const cubicBezier = (_x1: number, y1: number, _x2: number, y2: number): Easing => {
   // Newton-Raphson iteration for bezier solving
   const solve = (t: number): number => {
-    const cx = 3 * x1;
-    const bx = 3 * (x2 - x1) - cx;
-    const ax = 1 - cx - bx;
-    
     const cy = 3 * y1;
     const by = 3 * (y2 - y1) - cy;
     const ay = 1 - cy - by;
-    
+
     return ((ay * t + by) * t + cy) * t;
   };
   
