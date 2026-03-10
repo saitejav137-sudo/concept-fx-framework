@@ -8,6 +8,7 @@
 - **Easing.ts** - 20+ bezier-based easing functions, spring physics
 - **Vector2D.ts** - Complete 2D math library (bezier, catmull-rom, noise)
 - **Color.ts** - RGB/HSL/LAB color spaces, LUTs, palettes
+- **Physics.ts** - Friction physics, velocity damping, surface friction
 
 ### Post-Processing (src/postproc/)
 - **Effects.ts** - Gaussian blur, motion blur, bloom, chromatic aberration, vignette, film grain
