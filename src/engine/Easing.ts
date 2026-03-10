@@ -129,6 +129,33 @@ export const velocity = (v0: number = 0, a: number = 1): Easing => {
   return (t: number): number => v0 * t + 0.5 * a * t * t;
 };
 
+// Friction/drag easing - simulates object gradually slowing due to friction
+// coefficient: higher = more friction (0.01 - 1.0, default 0.15)
+export const friction = (coefficient: number = 0.15): Easing => {
+  return (t: number): number => {
+    // Using exponential decay formula
+    // v(t) = v0 * e^(-friction * t)
+    // position = integral of velocity = (1 - e^(-friction * t)) / friction
+    const c = Math.max(0.01, Math.min(1.0, coefficient));
+    return 1 - Math.exp(-c * t * 10);
+  };
+};
+
+// Fluid drag - simulates motion through fluid (more realistic drag)
+export const fluidDrag = (
+  dragCoefficient: number = 0.5,
+  mass: number = 1
+): Easing => {
+  return (t: number): number => {
+    const cd = Math.max(0.01, Math.min(2.0, dragCoefficient));
+    const m = Math.max(0.1, mass);
+    // Terminal velocity reached when drag = force
+    const terminalVelocity = 1 / cd;
+    // Position = terminalVelocity * (t - (1 - e^(-cd*t/m)) / cd)
+    return terminalVelocity * (t - (1 - Math.exp(-cd * t / m)) / cd);
+  };
+};
+
 // Aliases
 export const eases = {
   in: bezier.easeIn,
@@ -141,6 +168,8 @@ export const eases = {
   bounce: bezier.bounce,
   spring: spring(1, 180, 12),
   springBouncy: spring(1, 200, 8),
+  friction: friction(0.15),
+  fluidDrag: fluidDrag(0.5, 1),
 };
 
 // Utility: Chain multiple easings
