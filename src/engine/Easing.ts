@@ -129,6 +129,29 @@ export const velocity = (v0: number = 0, a: number = 1): Easing => {
   return (t: number): number => v0 * t + 0.5 * a * t * t;
 };
 
+// Friction - simulates object gradually slowing due to surface friction
+// coefficient: 0.001 (ice) to 1.0 (sandpaper), default 0.1
+export const friction = (coefficient: number = 0.1): Easing => {
+  return (t: number): number => {
+    const frictionForce = coefficient;
+    const velocity = 1 - frictionForce * t;
+    return Math.max(0, 1 - (frictionForce * t * t) / 2 - velocity * (1 - t));
+  };
+};
+
+// Fluid drag - simulates motion through fluid (air/water)
+// dragCoefficient: 0.01 (low drag) to 1.0 (high drag)
+// mass: affects how quickly object slows (heavier = less affected)
+export const fluidDrag = (
+  dragCoefficient: number = 0.1,
+  mass: number = 1
+): Easing => {
+  return (t: number): number => {
+    const drag = dragCoefficient / mass;
+    return 1 - Math.exp(-drag * t * 10);
+  };
+};
+
 // Aliases
 export const eases = {
   in: bezier.easeIn,
@@ -141,6 +164,8 @@ export const eases = {
   bounce: bezier.bounce,
   spring: spring(1, 180, 12),
   springBouncy: spring(1, 200, 8),
+  friction: friction(0.1),
+  fluidDrag: fluidDrag(0.1, 1),
 };
 
 // Utility: Chain multiple easings
