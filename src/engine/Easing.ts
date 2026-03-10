@@ -129,6 +129,38 @@ export const velocity = (v0: number = 0, a: number = 1): Easing => {
   return (t: number): number => v0 * t + 0.5 * a * t * t;
 };
 
+// Friction-based easing - simulates object gradually slowing due to surface friction
+// Uses the physics model: v = v0 * e^(-μ*t) where μ is the friction coefficient
+export const friction = (coefficient: number = 0.3): Easing => {
+  return (t: number): number => {
+    if (t <= 0) return 0;
+    if (t >= 1) return 1;
+    // Solve for position when v = v0 * e^(-μ*t) and x = ∫v dt
+    // x(t) = (v0/μ) * (1 - e^(-μ*t))
+    // Normalized: x(t) = (1 - e^(-μ*t)) / (1 - e^(-μ))
+    const mu = coefficient;
+    const decay = Math.exp(-mu * t);
+    const decay1 = Math.exp(-mu);
+    return (1 - decay) / (1 - decay1);
+  };
+};
+
+// Fluid drag easing - simulates motion through fluid (viscous drag)
+// Uses Stokes' law: F = -b*v (proportional to velocity)
+export const fluidDrag = (dragCoefficient: number = 0.5, mass: number = 1): Easing => {
+  return (t: number): number => {
+    if (t <= 0) return 0;
+    if (t >= 1) return 1;
+    // For F = -b*v with mass, solution is: v(t) = v0 * e^(-b/m * t)
+    // Position: x(t) = (m/b) * v0 * (1 - e^(-b/m * t))
+    // Let k = b/m, normalized: x(t) = (1 - e^(-k*t)) / (1 - e^(-k))
+    const k = dragCoefficient / mass;
+    const decay = Math.exp(-k * t);
+    const decay1 = Math.exp(-k);
+    return (1 - decay) / (1 - decay1);
+  };
+};
+
 // Aliases
 export const eases = {
   in: bezier.easeIn,
@@ -141,6 +173,8 @@ export const eases = {
   bounce: bezier.bounce,
   spring: spring(1, 180, 12),
   springBouncy: spring(1, 200, 8),
+  friction: friction(0.3),
+  fluidDrag: fluidDrag(0.5, 1),
 };
 
 // Utility: Chain multiple easings
