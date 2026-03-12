@@ -2,9 +2,8 @@
 
 import { registerRoot, Composition, useCurrentFrame, AbsoluteFill } from "remotion";
 import { eases, bezier, spring } from "./engine/Easing";
-import { vec, cubicBezier, lerp } from "./engine/Vector2D";
-import { palettes, rgb, rgbToHex, luts } from "./engine/Color";
-import { presets as postEffects } from "./postproc/Effects";
+import { vec, cubicBezier } from "./engine/Vector2D";
+import { rgb, rgbToHex } from "./engine/Color";
 
 const COLORS = {
   background: rgb(3, 3, 8),
@@ -28,9 +27,6 @@ const TitleScene: React.FC = () => {
   
   // Spring animation for subtitle
   const springVal = spring(200, 15)(Math.min(1, frame / 90));
-  
-  // Vector-based position
-  const titlePos = lerp(vec(-50, 35), vec(50, 35), bezier.easeOut(Math.min(1, frame / 50)));
   
   // Particles with physics
   const particles = [];
@@ -138,7 +134,7 @@ const EasingScene: React.FC = () => {
       </div>
       
       {easings.map((ease, i) => {
-        const barProgress = ease.fn(Math.min(1, Math.max(0, (localFrame - i * 30) / 40));
+        const barProgress = ease.fn(Math.min(1, Math.max(0, (localFrame - i * 30) / 40)));
         
         return (
           <div key={ease.name} style={{
@@ -263,7 +259,7 @@ const ColorScene: React.FC = () => {
         top: "5%",
         left: "50%",
         transform: "translateX(-50%)",
-        color: rgbToHex(COLORS.success || rgb(0, 255, 136)),
+        color: rgbToHex(rgb(0, 255, 136)),
         fontSize: 32,
         fontWeight: "bold",
         textShadow: `0 0 20px ${rgbToHex(rgb(0, 255, 136))}`,
@@ -282,7 +278,7 @@ const ColorScene: React.FC = () => {
         gap: 20,
         opacity: progress,
       }}>
-        {colorBars.map((bar, i) => (
+        {colorBars.map((bar) => (
           <div key={bar.name} style={{
             height: 80,
             backgroundColor: rgbToHex(bar.color),
