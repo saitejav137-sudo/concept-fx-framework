@@ -138,7 +138,7 @@ const EasingScene: React.FC = () => {
       </div>
       
       {easings.map((ease, i) => {
-        const barProgress = ease.fn(Math.min(1, Math.max(0, (localFrame - i * 30) / 40));
+        const barProgress = ease.fn(Math.min(1, Math.max(0, (localFrame - i * 30) / 40)));
         
         return (
           <div key={ease.name} style={{
