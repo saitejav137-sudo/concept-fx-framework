@@ -1,8 +1,6 @@
 // Post-Processing Effects Pipeline
 // Professional-grade visual effects
 
-import { RGB, rgb } from './Color';
-
 // Effect types
 export interface Effect {
   name: string;
@@ -220,7 +218,7 @@ export const vignette = (intensity: number = 0.5, softness: number = 0.5): Effec
         const dy = y - cy;
         const dist = Math.sqrt(dx * dx + dy * dy) / maxDist;
         
-        let vignette = 1 - Math.pow(Math.max(0, dist - (1 - softness)) / softness * intensity;
+        let vignette = 1 - Math.pow(Math.max(0, dist - (1 - softness)) / softness, intensity);
         vignette = Math.max(0, Math.min(1, vignette));
         
         const idx = (y * input.width + x) * 4;
@@ -372,7 +370,6 @@ export const presets = {
     filmGrain(0.05, 12345),
     chromaticAberration(2)
   ),
-  
   vintage: composeEffects(
     vignette(0.3, 0.5),
     filmGrain(0.08, 54321),
@@ -381,7 +378,9 @@ export const presets = {
       apply: (input: ImageData): ImageData => {
         const output = new ImageData(new Uint8ClampedArray(input.data), input.width, input.height);
         for (let i = 0; i < input.data.length; i += 4) {
-          const r = input.data[i], g = input.data[i + 1], b = input.data[i + 2];
+          const r = input.data[i];
+          const g = input.data[i + 1];
+          const b = input.data[i + 2];
           output.data[i] = Math.min(255, r * 0.393 + g * 0.769 + b * 0.189);
           output.data[i + 1] = Math.min(255, r * 0.349 + g * 0.686 + b * 0.168);
           output.data[i + 2] = Math.min(255, r * 0.272 + g * 0.534 + b * 0.131);
@@ -389,15 +388,12 @@ export const presets = {
         }
         return output;
       }
-    })()
+    }))
   ),
-  
   glow: composeEffects(
     bloom(180, 0.6),
     vignette(0.2, 0.7)
   ),
-  
   sharp: sharpen(0.8),
-  
   smooth: denoise(0.4),
 };

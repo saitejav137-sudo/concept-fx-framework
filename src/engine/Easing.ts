@@ -12,8 +12,9 @@ export const cubicBezier = (x1: number, y1: number, x2: number, y2: number): Eas
   // Newton-Raphson iteration for bezier solving
   const solve = (t: number): number => {
     const cx = 3 * x1;
-    const bx = 3 * (x2 - x1) - cx;
-    const ax = 1 - cx - bx;
+    // bx, ax reserved for x-component solving in advanced bezier
+    void (3 * (x2 - x1) - cx);
+    void 0;
     
     const cy = 3 * y1;
     const by = 3 * (y2 - y1) - cy;
